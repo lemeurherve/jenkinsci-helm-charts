@@ -1,2 +1,2 @@
 generate-release-notes: true
-release-notes-file: release-notes.txt
+release-notes-file: CHANGELOG.md
