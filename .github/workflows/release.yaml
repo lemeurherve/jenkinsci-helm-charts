@@ -102,12 +102,12 @@ jobs:
 
               console.log(updatedBody)
 
-              # await github.rest.repos.updateRelease({
-              #   id: currentRelease.id,
-              #   owner: context.repo.owner,
-              #   repo: context.repo.repo,
-              #   body: updatedBody,
-              # });
+              // await github.rest.repos.updateRelease({
+              //   id: currentRelease.id,
+              //   owner: context.repo.owner,
+              //   repo: context.repo.repo,
+              //   body: updatedBody,
+              // });
             } catch (error) {
               core.setFailed(error.message);
             }
