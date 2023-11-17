@@ -89,11 +89,7 @@ jobs:
           echo "LAST_TAG: $LAST_TAG"
           url="https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG}"
           echo "Url: $url"
-          release=$(curl -L \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            $url)
+          release=$(curl -L $url)
 
           body=$(echo $release | jq '.body')
           id=$(echo $release | jq '.id')
