@@ -76,19 +76,19 @@ jobs:
         # if: steps.chart_releaser.outputs.changed_charts != ''
         uses: actions/github-script@v6
         env:
-          TAG: ${{ steps.last_tag.outputs.tag }}
+          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
           CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
         with:
           script: |
-            const { TAG, CHANGELOG } = process.Env
+            const { LAST_TAG, CHANGELOG } = process.env
 
-            console.log(TAG)
+            console.log(LAST_TAG)
 
             try {
               await octokit.request('GET /repos/{owner}/{repo}/releases/tags/{tag}', {
                 owner: 'OWNER',
                 repo: 'REPO',
-                tag: 'TAG',
+                tag: 'LAST_TAG',
                 headers: {
                   'X-GitHub-Api-Version': '2022-11-28'
                 }
