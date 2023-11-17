@@ -72,12 +72,12 @@ jobs:
         run: |
           release=$(curl -L "https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG}")
 
-          echo "id=$(echo ${release} | jq '.id')" >> "${GITHUB_OUTPUT}"
+          echo "id=$(echo "${release}" | jq '.id')" >> "${GITHUB_OUTPUT}"
 
           delimiter="$(openssl rand -hex 8)"
           # shellcheck disable=SC2129
           echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo ${release} | jq '.body' >> "${GITHUB_OUTPUT}"
+          echo "${release}" | jq '.body' >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
       - name: Update release description
