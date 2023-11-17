@@ -93,7 +93,7 @@ jobs:
             console.log(process.env.CHANGELOG)
 
             try {
-              currentRelease = await github.rest.repos.getRelease({
+              currentRelease = await github.rest.repos.dfgdfgdRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 tag: process.env.LAST_TAG,
