@@ -55,7 +55,7 @@ jobs:
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
         run: |
-          changelog=$(awk -v tag=$LAST_TAG '
+          changelog=$(awk -v tag=${LAST_TAG#jenkins-} '
           /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
               if (p) { exit };
               if ($2 == tag) {
@@ -63,7 +63,7 @@ jobs:
               }
           } p
           ' charts/jenkins/CHANGELOG.md)
-          echo "Changelog for $LAST_TAG:"
+          echo "Changelog for ${LAST_TAG#jenkins-}:"
           echo $changelog        
 
           delimiter="$(openssl rand -hex 8)"
