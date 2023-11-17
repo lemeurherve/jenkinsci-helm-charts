@@ -71,32 +71,45 @@ jobs:
           echo "${changelog}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
     
-      # - name: Update release description
-      #   id: create_release
-      #   if: steps.chart_releaser.outputs.changed_charts != ''
-      #   uses: actions/github-script@v6
-      #   env:
-      #     CURRENT_DATE: ${{ steps.date.outputs.date }}
-      #     RELEASE_BODY: ${{steps.milestones_as_markdown.outputs.result}}
-      #   with:
-      #     script: |
-      #       name = `infra-team-sync-${process.env.CURRENT_DATE}`
-      #       tag = `${name}_${context.runNumber}`
+      - name: Update release description
+        id: update_release
+        # if: steps.chart_releaser.outputs.changed_charts != ''
+        uses: actions/github-script@v6
+        env:
+          TAG: ${{ steps.last_tag.outputs.tag }}
+          CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
+        with:
+          script: |
+            const { TAG, CHANGELOG } = process.Env
 
-      #       try {
-      #         await github.rest.repos.createRelease({
-      #           name: name,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           body: process.env.RELEASE_BODY,
-      #           tag_name: tag,
-      #           draft: true,
-      #           generate_release_notes: true,
-      #           prerelease: false,
-      #         });
-      #       } catch (error) {
-      #         core.setFailed(error.message);
-      #       }
+            console.log(TAG)
+
+            try {
+              await octokit.request('GET /repos/{owner}/{repo}/releases/tags/{tag}', {
+                owner: 'OWNER',
+                repo: 'REPO',
+                tag: 'TAG',
+                headers: {
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
+              })
+              currentRelease = await github.rest.repos.getRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: '`${TAG}`',
+              });
+
+              updatedBody = currentRelease.body + "\r\n" + CHANGELOG
+
+              await github.rest.repos.updateRelease({
+                id: currentRelease.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: updatedBody,
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
 
 
       # - name: "Generate markdown from current and next milestone"
