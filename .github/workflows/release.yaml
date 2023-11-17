@@ -132,7 +132,7 @@ jobs:
               console.log(updatedBody)
 
               await github.rest.repos.updateRelease({
-                id: process.env.ID,
+                release_id: process.env.ID,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: updatedBody,
