@@ -25,6 +25,7 @@ jobs:
           version: v3.12.0
 
       - name: Run chart-releaser
+        id: chart_releaser
         uses: helm/chart-releaser-action@v1.5.0
         with:
           config: cr.yaml
@@ -37,12 +38,16 @@ jobs:
       - name: Display Last Tag
         run: |
           echo "Last Tag: ${{ steps.last_tag.outputs.tag }}"
+      - name: Display Last cr version
+        run: |
+          echo "Last chart_version: ${{ steps.chart_releaser.outputs.chart_version }}"
 
 
       ## Retrieve the current description and id of the release from its tag
 
       - name: Extract last tag changelog
         id: last_tag_changelog
+        if: steps.chart_releaser.outputs.changed_charts != ''
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
         run: |
@@ -54,22 +59,17 @@ jobs:
               }
           } p
           ' charts/jenkins/CHANGELOG.md)
-          echo "TEST"
-          echo $changelog
-          echo "NEXT"
-          
+          echo "Changelog for $LAST_TAG:"
+          echo $changelog        
 
           delimiter="$(openssl rand -hex 8)"
           echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "${changelog}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
-      - name: Display changelog
-        run: |
-          echo "Changelog: ${{ steps.last_tag_changelog.outputs.changelog }}"
     
-      # ## Update current release description
-      # - name: "Create release"
+      # - name: Update release description
       #   id: create_release
+      #   if: steps.chart_releaser.outputs.changed_charts != ''
       #   uses: actions/github-script@v6
       #   env:
       #     CURRENT_DATE: ${{ steps.date.outputs.date }}
