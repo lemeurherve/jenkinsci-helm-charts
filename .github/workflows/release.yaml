@@ -48,7 +48,7 @@ jobs:
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
         run: |
-          changelog=$(awk -v tag=${LAST_TAG#jenkins-} '
+          changelog=$(awk -v tag="${LAST_TAG#jenkins-}" '
           /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
               if (p) { exit };
               if ($2 == tag) {
@@ -58,6 +58,7 @@ jobs:
           ' charts/jenkins/CHANGELOG.md)
 
           delimiter="$(openssl rand -hex 8)"
+          # shellcheck disable=SC2129
           echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "${changelog}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
@@ -74,6 +75,7 @@ jobs:
           echo "id=$(echo ${release} | jq '.id')" >> "${GITHUB_OUTPUT}"
 
           delimiter="$(openssl rand -hex 8)"
+          # shellcheck disable=SC2129
           echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo ${release} | jq '.body' >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
