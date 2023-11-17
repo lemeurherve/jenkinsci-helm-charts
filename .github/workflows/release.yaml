@@ -66,7 +66,7 @@ jobs:
           /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
               if (p) { exit };
               if ($2 == tag) {
-                  p = 1; next
+                  p = 1
               }
           } p
           ' charts/jenkins/CHANGELOG.md)
@@ -126,7 +126,7 @@ jobs:
 
             try {
 
-              updatedBody = process.env.BODY + "\r\n---\r\n" + process.env.CHANGELOG
+              updatedBody = process.env.BODY + "\r\n<hr>\r\n" + process.env.CHANGELOG
 
               console.log("updatedBody:")
               console.log(updatedBody)
