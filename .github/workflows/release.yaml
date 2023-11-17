@@ -91,6 +91,7 @@ jobs:
 
             console.log(LAST_TAG)
 
+            /*
             try {
               currentRelease = await github.rest.repos.getRelease({
                 owner: context.repo.owner,
@@ -111,6 +112,12 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
+            */
+# curl -L \
+#   -H "Accept: application/vnd.github+json" \
+#   -H "Authorization: Bearer $GH_TOKEN" \
+#   -H "X-GitHub-Api-Version: 2022-11-28" \
+#   https://api.github.com/repos/lemeurherve/jenkinsci-helm-charts/releases/tags/jenkins-5.1.36
 
 
       # - name: "Generate markdown from current and next milestone"
