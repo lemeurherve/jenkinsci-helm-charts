@@ -89,7 +89,10 @@ jobs:
           script: |
             const { LAST_TAG, CHANGELOG } = process.env
 
-            console.log(LAST_TAG)
+            console.log("last_tag:")
+            console.log(process.env.LAST_TAG)
+            console.log("changelog:")
+            console.log(process.env.CHANGELOG)
 
             /*
             try {
