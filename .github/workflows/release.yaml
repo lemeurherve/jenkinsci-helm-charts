@@ -35,6 +35,13 @@ jobs:
       - name: Dump All Outputs
         run: |
           echo "${{ toJson(steps.chart_releaser.outputs) }}"
+
+      # Retrieve last tag pushed by cr
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Get Last Tag
         id: last_tag
         run: echo "tag=$(git describe --abbrev=0 --tags)" >> "${GITHUB_OUTPUT}"
@@ -95,12 +102,12 @@ jobs:
 
               console.log(updatedBody)
 
-              await github.rest.repos.updateRelease({
-                id: currentRelease.id,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: updatedBody,
-              });
+              # await github.rest.repos.updateRelease({
+              #   id: currentRelease.id,
+              #   owner: context.repo.owner,
+              #   repo: context.repo.repo,
+              #   body: updatedBody,
+              # });
             } catch (error) {
               core.setFailed(error.message);
             }
