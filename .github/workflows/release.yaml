@@ -30,3 +30,169 @@ jobs:
           config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Get Last Tag
+        id: last_tag
+        run: echo "tag=$(git describe --abbrev=0 --tags)" >> "${GITHUB_OUTPUT}"
+
+      - name: Display Last Tag
+        run: |
+          echo "Last Tag: ${{ steps.last_tag.outputs.tag }}"
+
+
+      ## Retrieve the current description and id of the release from its tag
+
+      - name: Extract last tag changelog
+        id: last_tag_changelog
+        env:
+          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
+        run: |
+          echo "changelog=$(awk -v tag=$LAST_TAG '
+          /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
+              if (p) { exit };
+              if ($2 == ver) {
+                  p = 1; next
+              }
+          } p
+          ' charts/jenkins/CHANGELOG.md)" >> "${GITHUB_OUTPUT}"
+      - name: Display changelog
+        run: |
+          echo "Changelog: ${{ steps.last_tag_changelog.outputs.changelog }}"
+    
+      # ## Update current release description
+      # - name: "Create release"
+      #   id: create_release
+      #   uses: actions/github-script@v6
+      #   env:
+      #     CURRENT_DATE: ${{ steps.date.outputs.date }}
+      #     RELEASE_BODY: ${{steps.milestones_as_markdown.outputs.result}}
+      #   with:
+      #     script: |
+      #       name = `infra-team-sync-${process.env.CURRENT_DATE}`
+      #       tag = `${name}_${context.runNumber}`
+
+      #       try {
+      #         await github.rest.repos.createRelease({
+      #           name: name,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           body: process.env.RELEASE_BODY,
+      #           tag_name: tag,
+      #           draft: true,
+      #           generate_release_notes: true,
+      #           prerelease: false,
+      #         });
+      #       } catch (error) {
+      #         core.setFailed(error.message);
+      #       }
+
+
+      # - name: "Generate markdown from current and next milestone"
+      #   id: milestones_as_markdown
+      #   uses: actions/github-script@v6
+      #   with:
+      #     result-encoding: string
+      #     script: |
+      #       const getMilestoneAsMarkdown = async function(milestone, milestoneName, issuesState, closeReason) {
+      #         const opts = github.rest.issues.listForRepo.endpoint.merge({
+      #           ...context.issue,
+      #           milestone,
+      #           state: issuesState,
+      #           sort: 'updated',
+      #           per_page: 100,
+      #         })
+      #         const issues = await github.paginate(opts)
+
+      #         let markdown = ''
+      #         let category = (closeReason == 'completed') ? 'Done' : 'Closed as not planned'
+      #         let query = '?closed=1'
+
+      #         // There should not be any closed issue in the 'next' milestone, only 'Done' ones
+      #         if (issuesState == 'open') {
+      #           category = (milestoneName != 'next') ? 'Work In Progress' : 'Backlog'
+      #           if (milestoneName == 'todo') category = 'TODO (next milestone)'
+      #           query = ''
+      #         }
+
+      #         title = `* [${category}](${context.payload.repository.html_url}/milestone/${milestone}${query}):`
+
+      #         if (issues.length > 0) {
+      #           for (const issue of issues) {
+      #             if ((issuesState == 'open') || ((issuesState == 'closed') && (issue.state_reason == closeReason))){
+      #               markdown = markdown.concat("\r\n").concat(`  * [${issue.title}](${issue.html_url})`)
+      #             }
+      #           }
+      #         }
+              
+      #         if (markdown != '') markdown = title.concat("\r\n").concat(markdown)
+              
+      #         return markdown
+      #       }
+
+      #       done = await getMilestoneAsMarkdown(context.payload.inputs.milestone_id, context.payload.inputs.milestone_name, 'closed', 'completed')
+      #       notPlanned = await getMilestoneAsMarkdown(context.payload.inputs.milestone_id, context.payload.inputs.milestone_name, 'closed', 'not_planned')
+      #       wip = await getMilestoneAsMarkdown(context.payload.inputs.milestone_id, context.payload.inputs.milestone_name, 'open', '')
+      #       try {
+      #         todoMilestone = parseInt(context.payload.inputs.milestone_id) + 1
+      #         todo = await getMilestoneAsMarkdown(todoMilestone, 'todo', 'open', '')
+      #       } catch (error) {
+      #         console.error(error);
+      #         todo = ''
+      #       }
+      #       next = await getMilestoneAsMarkdown(context.payload.inputs.next_milestone_id, context.payload.inputs.next_milestone_name, 'open', '')
+
+      #       return `Markdown for the infra team sync meeting notes preparation:
+      #       <pre><code>
+      #       ${done}
+
+      #       ${notPlanned}
+
+      #       ${wip}
+
+      #       ${next}
+      #       </code></pre>
+
+      #       <details><summary>Preview:</summary>
+
+      #       ${done}
+            
+      #       * New items:
+      #           * placeholder 1
+      #           * placeholder 2
+            
+      #       ${wip}
+
+      #       ${todo}
+
+      #       <!--
+      #       ${next}
+      #       -->
+
+      #       </details>
+
+      #       Generated from the ["${context.payload.inputs.milestone_name}"](${context.payload.repository.html_url}/milestone/${context.payload.inputs.milestone_id}) and the ["${context.payload.inputs.next_milestone_name}"](${context.payload.repository.html_url}/milestone/${context.payload.inputs.next_milestone_id}) milestones.`
+
+      # - name: "Create release"
+      #   id: create_release
+      #   uses: actions/github-script@v6
+      #   env:
+      #     CURRENT_DATE: ${{ steps.date.outputs.date }}
+      #     RELEASE_BODY: ${{steps.milestones_as_markdown.outputs.result}}
+      #   with:
+      #     script: |
+      #       name = `infra-team-sync-${process.env.CURRENT_DATE}`
+      #       tag = `${name}_${context.runNumber}`
+
+      #       try {
+      #         await github.rest.repos.createRelease({
+      #           name: name,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           body: process.env.RELEASE_BODY,
+      #           tag_name: tag,
+      #           draft: true,
+      #           generate_release_notes: true,
+      #           prerelease: false,
+      #         });
+      #       } catch (error) {
+      #         core.setFailed(error.message);
+      #       }
