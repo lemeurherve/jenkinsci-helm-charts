@@ -46,14 +46,14 @@ jobs:
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
         run: |
-          echo "changelog=$(awk -v tag=$LAST_TAG '
+          echo "changelog=\"$(awk -v tag=$LAST_TAG '
           /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
               if (p) { exit };
               if ($2 == tag) {
                   p = 1; next
               }
           } p
-          ' charts/jenkins/CHANGELOG.md)" >> "${GITHUB_OUTPUT}"
+          ' charts/jenkins/CHANGELOG.md)\"" >> "${GITHUB_OUTPUT}"
       - name: Display changelog
         run: |
           echo "Changelog: ${{ steps.last_tag_changelog.outputs.changelog }}"
