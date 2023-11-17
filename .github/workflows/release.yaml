@@ -58,7 +58,7 @@ jobs:
           echo $changelog
           echo "NEXT"
           
-          echo "changelog=${changelog}" >> "${GITHUB_OUTPUT}"
+          echo "changelog=${changelog}" >> ${GITHUB_OUTPUT}
       - name: Display changelog
         run: |
           echo "Changelog: ${{ steps.last_tag_changelog.outputs.changelog }}"
