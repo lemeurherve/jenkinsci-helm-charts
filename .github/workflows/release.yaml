@@ -64,7 +64,7 @@ jobs:
           } p
           ' charts/jenkins/CHANGELOG.md)
           echo "Changelog for ${LAST_TAG#jenkins-}:"
-          echo $changelog        
+          echo "$changelog"    
 
           delimiter="$(openssl rand -hex 8)"
           echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
