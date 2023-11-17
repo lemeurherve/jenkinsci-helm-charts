@@ -77,13 +77,42 @@ jobs:
           echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "${changelog}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
-    
+
+      - name: Retrieve release info
+        id: release_info
+        env:
+          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          echo "REPOSITORY: $REPOSITORY"
+          echo "LAST_TAG: $LAST_TAG"
+          release=$(curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG})
+
+          body=$(echo release | jq '.body')
+          id=$(echo release | jq '.id')
+
+          delimiter="$(openssl rand -hex 8)"
+          echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "${body}" >> "${GITHUB_OUTPUT}"
+          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "id=${id}" >> "${GITHUB_OUTPUT}"
+
+      - name: Display release body
+        run: |
+          echo "Body: ${{ steps.release_info.outputs.body }}"
+          echo "Id: ${{ steps.release_info.outputs.id }}"
+
       - name: Update release description
         id: update_release
         # if: steps.chart_releaser.outputs.changed_charts != ''
         uses: actions/github-script@v6
         env:
-          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
+          ID: ${{ steps.release_info.outputs.body }}
+          BODY: ${{steps.release_info.outputs.id}}
           CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
         with:
           script: |
@@ -93,13 +122,8 @@ jobs:
             console.log(process.env.CHANGELOG)
 
             try {
-              currentRelease = await github.rest.repos.dfgdfgdRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag: process.env.LAST_TAG,
-              });
 
-              updatedBody = currentRelease.body + "\r\n" + process.env.CHANGELOG
+              updatedBody = process.env.BODY + "\r\n---\r\n" + process.env.CHANGELOG
 
               console.log(updatedBody)
 
@@ -116,7 +140,7 @@ jobs:
 #   -H "Accept: application/vnd.github+json" \
 #   -H "Authorization: Bearer $GH_TOKEN" \
 #   -H "X-GitHub-Api-Version: 2022-11-28" \
-#   https://api.github.com/repos/lemeurherve/jenkinsci-helm-charts/releases/tags/jenkins-5.1.36
+#   https://api.github.com/repos/{{ github.repository }}/releases/tags/jenkins-5.1.36
 
 
       # - name: "Generate markdown from current and next milestone"
