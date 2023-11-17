@@ -68,16 +68,14 @@ jobs:
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
           REPOSITORY: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
         run: |
-          url="https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG}"
-          release=$(curl -L $url)
+          release=$(curl -L "https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG}")
 
-          echo "id=$(echo $release | jq '.id')" >> "${GITHUB_OUTPUT}"
+          echo "id=$(echo ${release} | jq '.id')" >> "${GITHUB_OUTPUT}"
 
           delimiter="$(openssl rand -hex 8)"
           echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo $(echo $release | jq '.body') >> "${GITHUB_OUTPUT}"
+          echo ${release} | jq '.body' >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
       - name: Update release description
