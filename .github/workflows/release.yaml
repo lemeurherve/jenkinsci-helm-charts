@@ -87,22 +87,19 @@ jobs:
           CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
         with:
           script: |
-            const { LAST_TAG, CHANGELOG } = process.env
-
             console.log("last_tag:")
             console.log(process.env.LAST_TAG)
             console.log("changelog:")
             console.log(process.env.CHANGELOG)
 
-            /*
             try {
               currentRelease = await github.rest.repos.getRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                tag: LAST_TAG,
+                tag: process.env.LAST_TAG,
               });
 
-              updatedBody = currentRelease.body + "\r\n" + CHANGELOG
+              updatedBody = currentRelease.body + "\r\n" + process.env.CHANGELOG
 
               console.log(updatedBody)
 
@@ -115,7 +112,6 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-            */
 # curl -L \
 #   -H "Accept: application/vnd.github+json" \
 #   -H "Authorization: Bearer $GH_TOKEN" \
