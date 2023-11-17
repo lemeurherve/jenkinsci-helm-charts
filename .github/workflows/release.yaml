@@ -100,6 +100,7 @@ jobs:
           echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "${body}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+
           echo "id=${id}" >> "${GITHUB_OUTPUT}"
 
       - name: Display release body
@@ -117,23 +118,25 @@ jobs:
           CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
         with:
           script: |
-            console.log("last_tag:")
-            console.log(process.env.LAST_TAG)
             console.log("changelog:")
             console.log(process.env.CHANGELOG)
+
+            console.log("BODY:")
+            console.log(process.env.BODY)
 
             try {
 
               updatedBody = process.env.BODY + "\r\n---\r\n" + process.env.CHANGELOG
 
+              console.log("updatedBody:")
               console.log(updatedBody)
 
-              // await github.rest.repos.updateRelease({
-              //   id: currentRelease.id,
-              //   owner: context.repo.owner,
-              //   repo: context.repo.repo,
-              //   body: updatedBody,
-              // });
+              await github.rest.repos.updateRelease({
+                id: currentRelease.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: updatedBody,
+              });
             } catch (error) {
               core.setFailed(error.message);
             }
