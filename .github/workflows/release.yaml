@@ -31,6 +31,10 @@ jobs:
           config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Dump All Outputs
+        run: |
+          echo "${{ toJson(steps.chart_releaser.outputs) }}"
       - name: Get Last Tag
         id: last_tag
         run: echo "tag=$(git describe --abbrev=0 --tags)" >> "${GITHUB_OUTPUT}"
@@ -47,7 +51,7 @@ jobs:
 
       - name: Extract last tag changelog
         id: last_tag_changelog
-        if: steps.chart_releaser.outputs.changed_charts != ''
+        # if: steps.chart_releaser.outputs.changed_charts != ''
         env:
           LAST_TAG: ${{ steps.last_tag.outputs.tag }}
         run: |
