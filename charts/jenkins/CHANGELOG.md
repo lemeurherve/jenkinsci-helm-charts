@@ -12,99 +12,18 @@ Use the following links to reference issues, PRs, and commits prior to v2.6.0.
 The changelog until v1.5.7 was auto-generated based on git commits.
 Those entries include a reference to the git commit to be able to get more details.
 
-## 5.2.0
+## 6.0.0
 
-Testing chart-releaser with changelog 2.0
-Another line
-Some emoji! 👻 :trollface:
+👻 :tada:
 
-## 5.1.41
+Table for the example:
 
-Testing chart-releaser with changelog 40
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.40
-
-Testing chart-releaser with changelog 40
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.39
-
-Testing chart-releaser with changelog 39
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.38
-
-Testing chart-releaser with changelog 38
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.37
-
-Testing chart-releaser with changelog 37
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.36
-
-Testing chart-releaser with changelog 36
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.35
-
-Testing chart-releaser with changelog 35
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.34
-
-Testing chart-releaser with changelog 34
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.33
-
-Testing chart-releaser with changelog 33
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.32
-
-Testing chart-releaser with changelog 32
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.31
-
-Testing chart-releaser with changelog 1
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.1.0
-
-Testing chart-releaser with changelog
-Another line
-Some emoji! 👻 :trollface:
-
-## 5.0.3
-
-Testing chart-releaser 4
-
-## 5.0.2
-
-Testing chart-releaser 3
-
-## 5.0.1
-
-Testing chart-releaser too
-
-## 5.0.0
-
-Testing chart-releaser
+| plugin                | old version          | new version           |
+|-----------------------|----------------------|-----------------------|
+| kubernetes            | 3900.va_dce992317b_4 | 3937.vd7b_82db_e347b_ |
+| configuration-as-code | 1625.v27444588cc3d   | 1647.ve39ca_b_829b_42 |
+| git                   | 5.0.0                | 5.1.0                 |
+| ldap                  | 671.v2a_9192a_7419d  | 682.v7b_544c9d1512    |
 
 ## 4.8.3
 
