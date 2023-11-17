@@ -27,8 +27,8 @@ jobs:
       - name: Run chart-releaser
         id: chart_releaser
         uses: helm/chart-releaser-action@v1.6.0
-        with:
-          config: cr.yaml
+        # with:
+        #   config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
