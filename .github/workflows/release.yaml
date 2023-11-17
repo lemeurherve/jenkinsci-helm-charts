@@ -98,15 +98,10 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo "${body}" >> "${GITHUB_OUTPUT}"
+          echo ${body} >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
           echo "id=${id}" >> "${GITHUB_OUTPUT}"
-
-      - name: Display release body
-        run: |
-          echo "Body: ${{ steps.release_info.outputs.body }}"
-          echo "Id: ${{ steps.release_info.outputs.id }}"
 
       - name: Update release description
         id: update_release
