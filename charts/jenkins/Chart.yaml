@@ -1,7 +1,7 @@
 apiVersion: v2
 name: jenkins
 home: https://jenkins.io/
-version: 7.8.17
+version: 7.8.20
 appVersion: 2.426.1
 description: Jenkins - Build great things at any scale! The leading open source automation server, Jenkins provides over 1800 plugins to support building, deploying and automating any project.
 sources:
@@ -44,15 +44,3 @@ annotations:
       image: maorfr/kube-tasks:0.2.0
   artifacthub.io/category: "integration-delivery"
   artifacthub.io/license: "Apache-2.0"
-  artifacthub.io/changes: |
-    
-    👻 :tada:
-    
-    Table for the example:
-    
-    | plugin                | old version          | new version           |
-    |-----------------------|----------------------|-----------------------|
-    | kubernetes            | 3900.va_dce992317b_4 | 3937.vd7b_82db_e347b_ |
-    | configuration-as-code | 1625.v27444588cc3d   | 1647.ve39ca_b_829b_42 |
-    | git                   | 5.0.0                | 5.1.0                 |
-    | ldap                  | 671.v2a_9192a_7419d  | 682.v7b_544c9d1512    |
