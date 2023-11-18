@@ -80,6 +80,10 @@ jobs:
           echo "${annotations}" >> charts/jenkins/Chart.yaml
           echo "${delimiter}" >> charts/jenkins/Chart.yaml
 
+          echo "== annotations:"
+          echo "${annotations}"
+          echo "== annotations|yq:"
+          echo "${annotations}" | yq
 
       - name: cat Chart.yaml
         run: |
