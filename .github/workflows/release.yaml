@@ -71,7 +71,7 @@ jobs:
           done <<< "$CHANGELOG"
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
-          echo $annotations > charts/jenkins/Chart.yaml
+          echo $annotations >> charts/jenkins/Chart.yaml
 
 
       - name: cat Chart.yaml
