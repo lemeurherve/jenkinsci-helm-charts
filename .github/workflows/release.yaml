@@ -24,29 +24,22 @@ jobs:
         with:
           version: v3.12.0
 
-      - name: Run chart-releaser
-        id: chart_releaser
-        uses: helm/chart-releaser-action@v1.6.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-      # Retrieve last tag pushed by cr
-      - name: Checkout
-        if: steps.chart_releaser.outputs.changed_charts != ''
-        uses: actions/checkout@v4
+      - name: next release version
+        id: nextversion
+        uses: jenkins-x-plugins/jx-release-version@v2.7.1
         with:
-          fetch-depth: 0
+          previous-version: from-file:charts/jenkins/Chart.yaml
 
-      - name: Get Last Tag
-        id: last_tag
-        if: steps.chart_releaser.outputs.changed_charts != ''
-        run: echo "tag=$(git describe --abbrev=0 --tags)" >> "${GITHUB_OUTPUT}"
-
+      - name: Display next release version
+        env:
+          LAST_TAG: ${{ steps.nextversion.outputs.version }}
+        run: |
+          echo "LAST_TAG: $LAST_TAG"
+  
       - name: Extract last tag changelog
         id: last_tag_changelog
-        if: steps.chart_releaser.outputs.changed_charts != ''
         env:
-          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
+          LAST_TAG: ${{ steps.nextversion.outputs.version }}
         run: |
           changelog=$(awk -v tag="${LAST_TAG#jenkins-}" '
           /^(##|###) [0-9]+.[0-9]+.[0-9]+/ {
@@ -62,6 +55,24 @@ jobs:
           echo "changelog<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "${changelog}" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+
+      - name: Annotate Chart.yaml with changelog
+        env:
+          CHANGELOG: ${{steps.last_tag_changelog.outputs.changelog}}
+        run: |
+          echo "CHANGELOG: $CHANGELOG"
+          # Using sed to add 4 spaces at the beginning of each line
+          indented_changelog=$(echo $CHANGELOG | sed 's/^/    /')
+          echo "indented_changelog: $indented_changelog"
+            
+          echo '  artifacthub.io/changes: |' > charts/jenkins/Chart.yaml
+          echo $indented_changelog > charts/jenkins/Chart.yaml
+
+      - name: Run chart-releaser
+        id: chart_releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Retrieve release info
         id: release_info
