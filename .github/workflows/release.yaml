@@ -73,7 +73,7 @@ jobs:
         id: release_info
         if: steps.chart_releaser.outputs.changed_charts != ''
         env:
-          LAST_TAG: ${{ steps.last_tag.outputs.tag }}
+          LAST_TAG: "jenkins-${{ steps.nextversion.outputs.version }}"
           REPOSITORY: ${{ github.repository }}
         run: |
           release=$(curl -L "https://api.github.com/repos/${REPOSITORY}/releases/tags/${LAST_TAG}")
