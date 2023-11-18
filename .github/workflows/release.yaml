@@ -69,15 +69,15 @@ jobs:
           annotations=$(awk '/annotation/,/^$/' charts/jenkins/Chart.yaml)
 
           # Add changelog annotation
-          annotations="${annotations}\n  artifacthub.io/changes: |"
+          annotations="${annotations}${newline}  artifacthub.io/changes: |"
           while IFS= read -r line; do
-          annotations="${annotations}\n    ${line}"
+          annotations="${annotations}${newline}    ${line}"
           done <<< "$CHANGELOG"
 
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
-          echo "changelog<<${delimiter}" >> charts/jenkins/Chart.yaml
-          echo -e "${changelog}" >> charts/jenkins/Chart.yaml
+          echo "${delimiter}" >> charts/jenkins/Chart.yaml
+          echo "${annotations}" >> charts/jenkins/Chart.yaml
           echo "${delimiter}" >> charts/jenkins/Chart.yaml
 
 
