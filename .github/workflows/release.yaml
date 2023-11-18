@@ -62,21 +62,21 @@ jobs:
           CHANGELOG: ${{steps.version_changelog.outputs.changelog}}
         run: |
           echo "CHANGELOG: $CHANGELOG"
-          newline="$(printf '\nq')"
+          newline="$(printf '\r\nq')"
           newline=${newline%q}
 
           # Retrieve existing annotations
           annotations=$(awk '/annotation/,/^$/' charts/jenkins/Chart.yaml)
 
           # Add changelog annotation
-          annotations="${annotations}${newline}  artifacthub.io/changes: |"
+          annotations="${annotations}\n  artifacthub.io/changes: |"
           while IFS= read -r line; do
-          annotations="${annotations}${newline}    ${line}"
+          annotations="${annotations}\n    ${line}"
           done <<< "$CHANGELOG"
 
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
-          echo "${annotations}" >> charts/jenkins/Chart.yaml
+          echo -e "${annotations}" >> charts/jenkins/Chart.yaml
 
 
       - name: cat Chart.yaml
