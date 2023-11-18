@@ -27,7 +27,7 @@ jobs:
 
       - name: cat Chart.yaml
         run: |
-          yq cat charts/jenkins/Chart.yaml
+          yq charts/jenkins/Chart.yaml
       
   
 
@@ -76,7 +76,7 @@ jobs:
 
       - name: cat Chart.yaml
         run: |
-          yq cat charts/jenkins/Chart.yaml
+          yq charts/jenkins/Chart.yaml
   
 
 
