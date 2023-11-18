@@ -27,7 +27,7 @@ jobs:
 
       - name: cat Chart.yaml
         run: |
-          echo $(cat charts/jenkins/Chart.yaml)
+          yq cat charts/jenkins/Chart.yaml
       
   
 
@@ -76,7 +76,7 @@ jobs:
 
       - name: cat Chart.yaml
         run: |
-          echo $(cat charts/jenkins/Chart.yaml)
+          yq cat charts/jenkins/Chart.yaml
   
 
 
