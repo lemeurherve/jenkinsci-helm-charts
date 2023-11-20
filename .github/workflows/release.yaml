@@ -82,9 +82,9 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           # shellcheck disable=SC2129
-          echo "${delimiter}" >> charts/jenkins/Chart.yaml
+          # echo "${delimiter}" >> charts/jenkins/Chart.yaml
           echo "${annotations}" >> charts/jenkins/Chart.yaml
-          echo "${delimiter}" >> charts/jenkins/Chart.yaml
+          # echo "${delimiter}" >> charts/jenkins/Chart.yaml
 
           echo "== annotations:"
           echo "${annotations}"
