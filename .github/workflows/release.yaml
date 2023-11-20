@@ -71,7 +71,8 @@ jobs:
           # Add changelog annotation
           annotations="${annotations}${newline}  artifacthub.io/changes: |"
           while IFS= read -r line; do
-          annotations="${annotations}${newline}    ${line}"
+            # TODO: remove first empty line
+            annotations="${annotations}${newline}    ${line}"
           done <<< "$CHANGELOG"
 
           # Replace existing annotations
@@ -88,7 +89,7 @@ jobs:
           echo "${annotations}"
           echo "== cat annotations:"
           echo "${annotations}" > annotations.yaml
-          cat charts/jenkins/Chart.yaml annotations.yaml > charts/jenkins/Chart.yaml
+          cat annotations.yaml >> charts/jenkins/Chart.yaml
 
       - name: cat Chart.yaml
         run: |
