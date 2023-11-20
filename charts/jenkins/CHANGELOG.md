@@ -214,8 +214,6 @@ Table for the example:
 
 ## 7.8.9
 
-👻 :tada:
-
 Table for the example:
 
 | plugin                | old version          | new version           |

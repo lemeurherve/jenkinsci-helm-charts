@@ -49,6 +49,9 @@ jobs:
               }
           } p
           ' charts/jenkins/CHANGELOG.md)
+          
+          # Remove first line if empty
+          changelog=$(echo "${changelog}" | sed -e '2,$b' -e '/^$/d')
 
           delimiter="$(openssl rand -hex 8)"
           # shellcheck disable=SC2129
@@ -70,16 +73,11 @@ jobs:
 
           # Add changelog annotation
           annotations="${annotations}${newline}  artifacthub.io/changes: |"
-          counter=0
           while IFS= read -r line; do
-            # Skip first empty line if empty
-            if [[ -z "${line}" && $counter -eq 0 ]]; then
-              continue
-            fi
             annotations="${annotations}${newline}    ${line}"
-            ((counter++))
           done <<< "$CHANGELOG"
-          # annotations="${annotations}${newline}"
+          # Add empty line at the end
+          annotations="${annotations}${newline}"
 
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
