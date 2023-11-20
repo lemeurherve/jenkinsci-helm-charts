@@ -75,6 +75,19 @@ jobs:
             annotations="${annotations}${newline}    ${line}"
           done <<< "$CHANGELOG"
 
+          # counter=0
+          # while IFS= read -r line; do
+          #   # Skip first empty line if empty
+          #   # if [[ -z "${line}" && $counter -eq 0 ]]; then
+          #   #   continue
+          #   # fi
+          #   annotations="${annotations}${newline}    ${line}"
+          #   ((counter++))
+          # done <<< "$CHANGELOG"
+          # # Add EOF
+          # # annotations="${annotations}${newline}"
+
+
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
           
