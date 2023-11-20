@@ -92,6 +92,9 @@ jobs:
           # echo "${annotations}" > annotations.yaml
           # cat annotations.yaml >> charts/jenkins/Chart.yaml
 
+          echo "== cat Chart.yaml:"
+          cat charts/jenkins/Chart.yaml
+
       - name: cat Chart.yaml
         run: |
           yq charts/jenkins/Chart.yaml
