@@ -70,23 +70,16 @@ jobs:
 
           # Add changelog annotation
           annotations="${annotations}${newline}  artifacthub.io/changes: |"
+          counter=0
           while IFS= read -r line; do
-            # TODO: remove first empty line
+            # Skip first empty line if empty
+            if [[ -z "${line}" && $counter -eq 0 ]]; then
+              continue
+            fi
             annotations="${annotations}${newline}    ${line}"
+            ((counter++))
           done <<< "$CHANGELOG"
-
-          # counter=0
-          # while IFS= read -r line; do
-          #   # Skip first empty line if empty
-          #   # if [[ -z "${line}" && $counter -eq 0 ]]; then
-          #   #   continue
-          #   # fi
-          #   annotations="${annotations}${newline}    ${line}"
-          #   ((counter++))
-          # done <<< "$CHANGELOG"
-          # # Add EOF
-          # # annotations="${annotations}${newline}"
-
+          # annotations="${annotations}${newline}"
 
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
