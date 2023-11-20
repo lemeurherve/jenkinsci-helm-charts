@@ -76,14 +76,19 @@ jobs:
 
           # Replace existing annotations
           yq --inplace 'del(.annotations)' charts/jenkins/Chart.yaml
-          echo "${delimiter}" >> charts/jenkins/Chart.yaml
-          echo "${annotations}" >> charts/jenkins/Chart.yaml
-          echo "${delimiter}" >> charts/jenkins/Chart.yaml
+          
+          # TODOD!
+
+          delimiter="$(openssl rand -hex 8)"
+          # echo "${delimiter}" >> charts/jenkins/Chart.yaml
+          # echo "${annotations}" >> charts/jenkins/Chart.yaml
+          # echo "${delimiter}" >> charts/jenkins/Chart.yaml
 
           echo "== annotations:"
           echo "${annotations}"
-          echo "== annotations|yq:"
-          echo "${annotations}" | yq
+          echo "== cat annotations:"
+          echo "${annotations}" > annotations.yaml
+          cat charts/jenkins/Chart.yaml annotations.yaml
 
       - name: cat Chart.yaml
         run: |
