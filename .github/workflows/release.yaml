@@ -65,6 +65,11 @@ jobs:
           CHANGELOG: ${{steps.version_changelog.outputs.changelog}}
         run: |
           echo "CHANGELOG: $CHANGELOG"
+          stripped_changelog=$(echo "$CHANGELOG" | iconv -c -f utf8 -t ascii)
+          stripped_changelog="${stripped_changelog#"${stripped_changelog%%[![:space:]]*}"}"
+          echo "stripped_changelog:"
+          echo "$stripped_changelog"
+
           newline="$(printf '\r\nq')"
           newline=${newline%q}
 
@@ -75,7 +80,7 @@ jobs:
           annotations="${annotations}${newline}  artifacthub.io/changes: |"
           while IFS= read -r line; do
             annotations="${annotations}${newline}    ${line}"
-          done <<< "$CHANGELOG"
+          done <<< "$stripped_changelog"
           # Add empty line at the end
           annotations="${annotations}${newline}"
 
