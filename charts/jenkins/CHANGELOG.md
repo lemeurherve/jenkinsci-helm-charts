@@ -14,13 +14,7 @@ Those entries include a reference to the git commit to be able to get more detai
 
 ## 4.8.5
 
-📦 Add `artifacthub.io/changes` changelog annotation to the released chart.
-
-Table example:
-| plugin                | old version          | new version           |
-|-----------------------|----------------------|-----------------------|
-| kubernetes            | 3900.va_dce992317b_4 | 3937.vd7b_82db_e347b_ |
-| configuration-as-code | 1625.v27444588cc3d   | 1647.ve39ca_b_829b_42 |
+Fix `artifacthub.io/changes` changelog scalar annotation.
 
 ## 4.8.4
 
