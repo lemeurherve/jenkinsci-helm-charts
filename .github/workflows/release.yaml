@@ -72,7 +72,7 @@ jobs:
 
           # TODO: if one line add  --style=double
 
-          yq --inplace --style=double ".annotations.\"artifacthub.io/changes\" |= \"${stripped_changelog}\"" charts/jenkins/Chart.yaml
+          yq --inplace --unwrapScalar ".annotations.\"artifacthub.io/changes\" |= \"${stripped_changelog}\"" charts/jenkins/Chart.yaml
 
       - name: Show updated Chart.yaml
         run: |
