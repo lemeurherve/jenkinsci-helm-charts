@@ -73,7 +73,7 @@ jobs:
           # Add double quotes if it's a single line string
           [ $(echo "$my_string" | wc -l | xargs) == 1 ] && stripped_changelog="\"${stripped_changelog}\"""
 
-          yq --inplace ".annotations.\"artifacthub.io/changes\" = ${stripped_changelog}" charts/jenkins/Chart.yaml
+          yq --inplace ".annotations.\"artifacthub.io/changes\" = \"${stripped_changelog}\"" charts/jenkins/Chart.yaml
 
       - name: Show updated Chart.yaml
         run: |
