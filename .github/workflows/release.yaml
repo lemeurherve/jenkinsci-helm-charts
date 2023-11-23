@@ -70,11 +70,12 @@ jobs:
 
           # Update chart annotations
 
-          # Add double quotes if it's a single line string
-          lineCount=$(echo "$my_string" | wc -l | xargs)
-          [[ $(echo "$my_string" | wc -l | xargs) == 1 ]] && stripped_changelog="\"${stripped_changelog}\""
+          # # Add double quotes if it's a single line string
+          # lineCount=$(echo "$my_string" | wc -l | xargs)
+          # [[ $(echo "$my_string" | wc -l | xargs) == 1 ]] && echo "Single line changelog" && stripped_changelog="${stripped_changelog}"
 
-          yq --inplace ".annotations.\"artifacthub.io/changes\" = \"${stripped_changelog}\"" charts/jenkins/Chart.yaml
+          printf -v changelog "${stripped_changelog}\n"
+          CHANGE="$changelog" yq --inplace ".annotations.\"artifacthub.io/changes\" = strenv(CHANGE)" charts/jenkins/Chart.yaml
 
       - name: Show updated Chart.yaml
         run: |
