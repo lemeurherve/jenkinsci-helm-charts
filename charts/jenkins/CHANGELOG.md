@@ -12,42 +12,6 @@ Use the following links to reference issues, PRs, and commits prior to v2.6.0.
 The changelog until v1.5.7 was auto-generated based on git commits.
 Those entries include a reference to the git commit to be able to get more details.
 
-## 9.0.2
-
-👻 Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 9.0.1
-
-👻 Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 9.0.0
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 8.0.0
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 4.8.10
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 4.8.9
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 4.8.8
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 4.8.7
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
-## 4.8.6
-
-Fix `artifacthub.io/changes` changelog scalar annotation.
-
 ## 4.8.5
 
 Fix `artifacthub.io/changes` changelog annotation added to the released chart.
