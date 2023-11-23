@@ -68,14 +68,10 @@ jobs:
           # - Remove leading spaces
           stripped_changelog="${stripped_changelog#"${stripped_changelog%%[![:space:]]*}"}"
 
-          # Update chart annotations
+          # Update chart annotations with yq's strenv operator (https://mikefarah.gitbook.io/yq/operators/string-operators#string-blocks-bash-and-newlines)
+          printf -v change '%s\n' "${stripped_changelog}"
 
-          # # Add double quotes if it's a single line string
-          # lineCount=$(echo "$my_string" | wc -l | xargs)
-          # [[ $(echo "$my_string" | wc -l | xargs) == 1 ]] && echo "Single line changelog" && stripped_changelog="${stripped_changelog}"
-
-          printf -v changelog "${stripped_changelog}\n"
-          CHANGE="$changelog" yq --inplace ".annotations.\"artifacthub.io/changes\" = strenv(CHANGE)" charts/jenkins/Chart.yaml
+          CHANGE="$change" yq --inplace ".annotations.\"artifacthub.io/changes\" = strenv(CHANGE)" charts/jenkins/Chart.yaml
 
       - name: Show updated Chart.yaml
         run: |
